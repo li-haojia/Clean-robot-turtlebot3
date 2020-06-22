@@ -1,0 +1,4 @@
+/CMakeLists.txt
+*.pyc
+*.o
+.vscode
