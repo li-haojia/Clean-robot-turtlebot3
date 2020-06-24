@@ -1,0 +1,26 @@
+<launch>
+  <!-- Arguments -->
+  <arg name="model" default="burger" doc="model type [burger, waffle, waffle_pi]"/>
+  <arg name="map_file" default="$(find clean_robot)/maps/clean_room.yaml"/>
+  <arg name="open_rviz" default="true"/>
+  <arg name="move_forward_only" default="false"/>
+
+
+  <!-- Map server -->
+  <node pkg="map_server" name="map_server" type="map_server" args="$(arg map_file)"/>
+
+  <!-- AMCL -->
+  <include file="$(find clean_robot)/launch/amcl.launch"/>
+
+  <!-- move_base -->
+  <include file="$(find clean_robot)/launch/move_base.launch">
+    <arg name="model" value="$(arg model)" />
+    <arg name="move_forward_only" value="$(arg move_forward_only)"/>
+  </include>
+
+  <!-- rviz -->
+  <group if="$(arg open_rviz)"> 
+    <node pkg="rviz" type="rviz" name="rviz" required="true"
+          args="-d $(find clean_robot)/rviz/turtlebot3_navigation.rviz"/>
+  </group>
+</launch>

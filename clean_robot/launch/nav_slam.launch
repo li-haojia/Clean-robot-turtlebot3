@@ -25,6 +25,6 @@
   </group>
 
   <include file="$(find turtlebot3_navigation)/launch/move_base.launch"/>
-  <node pkg="turtlebot3_teleop" type="turtlebot3_teleop_key" name="turtlebot3_teleop_key" output="screen"/>
+  <node pkg="turtlebot3_teleop" type="turtlebot3_teleop_key" name="turtlebot3_teleop_key" launch-prefix="xterm -e" output="screen"/>
 
 </launch>

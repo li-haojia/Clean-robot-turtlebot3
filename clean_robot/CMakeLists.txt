@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.0.2)
 project(clean_robot)
 
 ## Compile as C++11, supported in ROS Kinetic and newer
-# add_compile_options(-std=c++11)
+add_compile_options(-std=c++11)
 
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
@@ -16,7 +16,17 @@ find_package(catkin REQUIRED COMPONENTS
   roscpp
   tf
 )
-
+find_package(OpenCV REQUIRED)
+include_directories(${OpenCV_INCLUDE_DIRS})
+find_package(catkin REQUIRED
+  COMPONENTS
+    angles
+    costmap_2d
+    geometry_msgs
+    nav_msgs
+    roscpp
+    tf
+)
 ## System dependencies are found with CMake's conventions
 # find_package(Boost REQUIRED COMPONENTS system)
 
@@ -107,10 +117,10 @@ find_package(catkin REQUIRED COMPONENTS
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES clean_robot
-#  CATKIN_DEPENDS actionlib costmap_2d geometry_msgs move_base_msgs nav_msgs roscpp tf
-#  DEPENDS system_lib
+ INCLUDE_DIRS include
+ LIBRARIES clean_robot
+ CATKIN_DEPENDS actionlib costmap_2d geometry_msgs move_base_msgs nav_msgs roscpp tf
+ DEPENDS system_lib
 )
 
 ###########
@@ -120,7 +130,7 @@ catkin_package(
 ## Specify additional locations of header files
 ## Your package locations should be listed before other locations
 include_directories(
-# include
+include
   ${catkin_INCLUDE_DIRS}
 )
 
@@ -208,3 +218,11 @@ include_directories(
 
 ## Add folders to be run by python nosetests
 # catkin_add_nosetests(test)
+
+add_executable(path_planning_node src/PathPlanningNode.cpp src/CleaningPathPlanner.cpp )
+target_link_libraries(path_planning_node ${catkin_LIBRARIES} ${OpenCV_LIBS})
+
+add_executable(next_goal src/next_goal.cpp)
+target_link_libraries(next_goal
+	${catkin_LIBRARIES}
+)

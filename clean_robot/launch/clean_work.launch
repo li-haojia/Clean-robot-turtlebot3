@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<launch>
+
+    <!-- 下面的很多内容都是从 turtlebot3_slam.launch 文件抄过来的 -->
+    <!-- Arguments -->
+    <!-- <arg name="slam_methods" default="karto" doc="slam type [gmapping, cartographer, hector, karto, frontier_exploration]"/> -->
+    <arg name="model" value="burger" doc="model type [burger, waffle, waffle_pi]"/>
+    <arg name="configuration_basename" default="turtlebot3_lds_2d.lua"/>
+    <arg name="open_rviz" default="true"/>
+    <include file="$(find turtlebot3_bringup)/launch/turtlebot3_remote.launch">
+        <arg name="model" value="$(arg model)" />
+    </include>
+
+    <include file="$(find clean_robot)/launch/gazebo.launch"/>
+
+
+
+    <!-- 启动 rviz 的标签 -->
+    <!-- <group if="$(arg open_rviz)">
+        <node pkg="rviz" type="rviz" name="rviz" required="true" args="-d $(find clean_robot)/rviz/turtlebot3_karto.rviz"/>
+    </group> -->
+
+    <include file="$(find clean_robot)/launch/turtlebot3_navigation.launch">
+        <arg name="model" value="$(arg model)" />
+    </include>
+    <!-- <node pkg="turtlebot3_teleop" type="turtlebot3_teleop_key" name="turtlebot3_teleop_key" output="screen"/> -->
+
+    <node pkg="clean_robot" type="path_planning_node" respawn="false" name="path_planning_node" output="screen" clear_params="true">
+        <rosparam file="$(find clean_robot)/config/costmap_common_params.yaml" command="load" ns="cleaning_costmap" />
+        <rosparam file="$(find clean_robot)/config/cleaning_costmap_params.yaml" command="load" />
+    </node>
+    <param name="/NextGoal/tolerance_goal" value="0.25" />
+    <node pkg="clean_robot" type="next_goal" respawn="true" name="next_goal" output="screen" />
+</launch>
