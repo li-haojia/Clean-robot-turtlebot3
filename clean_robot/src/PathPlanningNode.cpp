@@ -20,10 +20,11 @@ int main(int argc, char** argv) {
     costmap_2d::Costmap2DROS lcr("cleaning_costmap", tf);
     //planner_costmap_ros_->pause();
 
+    ros::Duration(5).sleep();
     CleaningPathPlanning clr(&lcr);
     clr.GetPathInROS();
     //clr.GetBorderTrackingPathInROS();   //这句话为啥就给注释掉了呢？？？？？不解。
-    ros::Rate r(10);
+    ros::Rate r(1);
     while(ros::ok()){       //ros::ok可以通俗地理解为ros还好吗？是否被叫停。
       clr.PublishCoveragePath();
       ros::spinOnce();//这里要这个ros:spin()会不会是鸡肋？？？没有看到回调函数，只有一个tf树的监听者。

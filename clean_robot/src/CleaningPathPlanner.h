@@ -24,7 +24,7 @@
 using namespace cv;
 using namespace std;
 
-constexpr double PI =3.14159;
+constexpr double PI = 3.14159;
 
 struct cellIndex
 {
@@ -33,16 +33,6 @@ struct cellIndex
     double theta; //{0, 45,90,135,180,225,270,315}     角度信息   hjr 注
 };
 
-struct Astar
-{
-  int row;
-  int col;
-  int father_row;
-  int father_col;
-  int F;
-  int G;
-  int H;
-};
 
 /*************************************************
  *
@@ -56,41 +46,33 @@ public:
     //CleaningPathPlanning() = delete;
     CleaningPathPlanning(costmap_2d::Costmap2DROS *costmap2d_ros);
 
-    vector<geometry_msgs::PoseStamped> GetPathInROS(); 
+    vector<geometry_msgs::PoseStamped> GetPathInROS();
     vector<geometry_msgs::PoseStamped> GetBorderTrackingPathInROS();
 
-    void SetCoveredGrid(double wx,double wy);
-    int GetSizeOfCell(){return this->SIZE_OF_CELL;}
-    bool Boundingjudge(int a,int b);
+    void SetCoveredGrid(double wx, double wy);
+    int GetSizeOfCell() { return this->SIZE_OF_CELL; }
+    bool Boundingjudge(int a, int b);
     //for visualization
     void PublishCoveragePath();
     void PublishGrid();
-    bool outcloselist(int a, int b);
-    bool outopenlist(int a,int b);
-    
-    void Astar_find_path(int a,int b,int c,int d);
-    vector<Astar> openlist;
-    vector<Astar> closelist;
-    Mat Astarmap;
-    int G_compare=0;
-    
+
+
 private:
     //helper functions.
     bool initializeMats();
     bool initializeCoveredGrid();
-    void getCellMatAndFreeSpace(Mat srcImg, Mat &cellMat,vector<cellIndex> &freeSpaceVec);
+    void getCellMatAndFreeSpace(Mat srcImg, Mat &cellMat, vector<cellIndex> &freeSpaceVec);
     void initializeNeuralMat(Mat cellMat, Mat neuralizedMat);
-    void writeResult(Mat resultmat,vector<cellIndex> pathVec);
-    void writeResult(cv::Mat resultmat,std::vector<cv::Point2i> pathVec);
+    void writeResult(Mat resultmat, vector<cellIndex> pathVec);
+    void writeResult(cv::Mat resultmat, std::vector<cv::Point2i> pathVec);
     void mainPlanningLoop();
-    double distance(Point2i pta,Point2i ptb);
-    bool findElement(vector<cv::Point2i> pointsVec,cv::Point2i pt, int&index);
-    void publishPlan(const std::vector<geometry_msgs::PoseStamped>& path);
-    bool cellContainsPoint(cv::Point2i pt,cellIndex cell);
+    double distance(Point2i pta, Point2i ptb);
+    bool findElement(vector<cv::Point2i> pointsVec, cv::Point2i pt, int &index);
+    void publishPlan(const std::vector<geometry_msgs::PoseStamped> &path);
+    bool cellContainsPoint(cv::Point2i pt, cellIndex cell);
 
-    void GetBorderTrackingPathInCV(vector<cv::Point2i>&resultVec);
+    void GetBorderTrackingPathInCV(vector<cv::Point2i> &resultVec);
     vector<cellIndex> GetPathInCV();
-
 
     bool initialized_;
     Mat srcMap_;
@@ -108,12 +90,11 @@ private:
     //tf::TransformListener &tf_;
     tf::Stamped<tf::Pose> initPose_;
 
-    costmap_2d::Costmap2D* costmap2d_;
-    costmap_2d::Costmap2DROS* costmap2d_ros_;
+    costmap_2d::Costmap2D *costmap2d_;
+    costmap_2d::Costmap2DROS *costmap2d_ros_;
 
     int SIZE_OF_CELL; //must be odd number.
     int GRID_COVERED_VALUE;
-    
 };
 
 #endif // CLEANINGPATHPLANNING_H
