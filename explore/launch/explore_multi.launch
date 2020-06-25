@@ -1,0 +1,239 @@
+<launch>
+ 
+<!-- Argument -->
+  <arg name="model" default="$(env TURTLEBOT3_MODEL)" doc="model type [burger, waffle, waffle_pi]"/>
+  <arg name="move_forward_only" default="false"/>
+  <arg name="cmd_vel_topic" default="/cmd_vel" />
+  <arg name="odom_topic" default="odom" />
+ 
+<group ns="tb3_0">
+<!-- Turtlebot3 -->
+  <include file="$(find turtlebot3_bringup)/launch/includes/description.launch.xml">
+    <arg name="model" value="$(arg model)" />
+  </include>
+ 
+  <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" output="screen">
+    <param name="publish_frequency" type="double" value="50.0" />
+    <param name="tf_prefix" value="tb3_0" />
+  </node>
+ 
+<!-- move_base -->
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+    <param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS" />
+    <rosparam file="$(find explore_lite)/param/first_costmap_common_params_$(arg model).yaml" command="load" ns="/tb3_0/global_costmap" />
+    <rosparam file="$(find explore_lite)/param/first_costmap_common_params_$(arg model).yaml" command="load" ns="/tb3_0/local_costmap" />
+    <rosparam file="$(find explore_lite)/param/first_local_costmap_params.yaml" command="load" />
+    <rosparam file="$(find explore_lite)/param/first_global_costmap_params.yaml" command="load" />
+    <rosparam file="$(find explore_lite)/param/move_base_params.yaml" command="load" />
+    <rosparam file="$(find explore_lite)/param/dwa_local_planner_params_$(arg model).yaml" command="load" />
+    <remap from="cmd_vel" to="/tb3_0/cmd_vel"/>
+    <remap from="odom" to="tb3_0/odom"/>
+    <param name="DWAPlannerROS/min_vel_x" value="0.0" if="$(arg move_forward_only)" />
+  </node>
+ 
+<!-- SLAM -->
+  <node pkg="gmapping" type="slam_gmapping" name="turtlebot3_slam_gmapping" output="screen">
+    <param name="base_frame" value="/tb3_0/base_footprint"/>
+    <param name="odom_frame" value="/tb3_0/odom"/>
+    <param name="map_frame"  value="/tb3_0/map"/>
+    <param name="map_update_interval" value="2.0"/>
+    <param name="maxUrange" value="3.0"/>
+    <param name="sigma" value="0.05"/>
+    <param name="kernelSize" value="1"/>
+    <param name="lstep" value="0.05"/>
+    <param name="astep" value="0.05"/>
+    <param name="iterations" value="5"/>
+    <param name="lsigma" value="0.075"/>
+    <param name="ogain" value="3.0"/>
+    <param name="lskip" value="0"/>
+    <param name="minimumScore" value="50"/>
+    <param name="srr" value="0.1"/>
+    <param name="srt" value="0.2"/>
+    <param name="str" value="0.1"/>
+    <param name="stt" value="0.2"/>
+    <param name="linearUpdate" value="1.0"/>
+    <param name="angularUpdate" value="0.2"/>
+    <param name="temporalUpdate" value="0.5"/>
+    <param name="resampleThreshold" value="0.5"/>
+    <param name="particles" value="100"/>
+    <param name="xmin" value="-10.0"/>
+    <param name="ymin" value="-10.0"/>
+    <param name="xmax" value="10.0"/>
+    <param name="ymax" value="10.0"/>
+    <param name="delta" value="0.05"/>
+    <param name="llsamplerange" value="0.01"/>
+    <param name="llsamplestep" value="0.01"/>
+    <param name="lasamplerange" value="0.005"/>
+    <param name="lasamplestep" value="0.005"/>
+  </node>
+ 
+<!-- Explore -->
+<node pkg="explore_lite" type="explore" respawn="false" name="explore" output="screen">
+  <param name="robot_base_frame" value="/tb3_0/base_footprint"/>
+  <param name="costmap_topic" value="/tb3_0/map"/>
+  <param name="costmap_updates_topic" value="/tb3_0/map_updates"/>
+  <param name="visualize" value="true"/>
+  <param name="planner_frequency" value="0.33"/>
+  <param name="progress_timeout" value="30.0"/>
+  <param name="potential_scale" value="3.0"/>
+  <param name="orientation_scale" value="0.0"/>
+  <param name="gain_scale" value="1.0"/>
+  <param name="transform_tolerance" value="0.3"/>
+  <param name="min_frontier_size" value="0.75"/>
+</node>
+</group>
+ 
+<group ns="tb3_1">
+<!-- Turtlebot3 -->
+  <include file="$(find turtlebot3_bringup)/launch/includes/description.launch.xml">
+    <arg name="model" value="$(arg model)" />
+  </include>
+  
+  <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" output="screen">
+    <param name="publish_frequency" type="double" value="50.0" />
+    <param name="tf_prefix" value="tb3_1" />
+  </node>
+ 
+<!-- move_base -->
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+    <param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS" />
+    <rosparam file="$(find explore_lite)/param/second_costmap_common_params_$(arg model).yaml" command="load" ns="/tb3_1/global_costmap" />
+    <rosparam file="$(find explore_lite)/param/second_costmap_common_params_$(arg model).yaml" command="load" ns="/tb3_1/local_costmap" />
+    <rosparam file="$(find explore_lite)/param/second_local_costmap_params.yaml" command="load" />
+    <rosparam file="$(find explore_lite)/param/second_global_costmap_params.yaml" command="load" />
+    <rosparam file="$(find explore_lite)/param/move_base_params.yaml" command="load" />
+    <rosparam file="$(find explore_lite)/param/dwa_local_planner_params_$(arg model).yaml" command="load" />
+    <remap from="cmd_vel" to="/tb3_1/cmd_vel"/>
+    <remap from="odom" to="/tb3_1/odom"/>
+    <param name="DWAPlannerROS/min_vel_x" value="0.0" if="$(arg move_forward_only)" />
+  </node>
+ 
+  <node pkg="gmapping" type="slam_gmapping" name="turtlebot3_slam_gmapping" output="screen">
+    <param name="base_frame" value="/tb3_1/base_footprint"/>
+    <param name="odom_frame" value="/tb3_1/odom"/>
+    <param name="map_frame"  value="/tb3_1/map"/>
+    <param name="map_update_interval" value="2.0"/>
+    <param name="maxUrange" value="3.0"/>
+    <param name="sigma" value="0.05"/>
+    <param name="kernelSize" value="1"/>
+    <param name="lstep" value="0.05"/>
+    <param name="astep" value="0.05"/>
+    <param name="iterations" value="5"/>
+    <param name="lsigma" value="0.075"/>
+    <param name="ogain" value="3.0"/>
+    <param name="lskip" value="0"/>
+    <param name="minimumScore" value="50"/>
+    <param name="srr" value="0.1"/>
+    <param name="srt" value="0.2"/>
+    <param name="str" value="0.1"/>
+    <param name="stt" value="0.2"/>
+    <param name="linearUpdate" value="1.0"/>
+    <param name="angularUpdate" value="0.2"/>
+    <param name="temporalUpdate" value="0.5"/>
+    <param name="resampleThreshold" value="0.5"/>
+    <param name="particles" value="100"/>
+    <param name="xmin" value="-10.0"/>
+    <param name="ymin" value="-10.0"/>
+    <param name="xmax" value="10.0"/>
+    <param name="ymax" value="10.0"/>
+    <param name="delta" value="0.05"/>
+    <param name="llsamplerange" value="0.01"/>
+    <param name="llsamplestep" value="0.01"/>
+    <param name="lasamplerange" value="0.005"/>
+    <param name="lasamplestep" value="0.005"/>
+  </node>
+ 
+<!-- Explore -->
+<node pkg="explore_lite" type="explore" respawn="false" name="explore" output="screen">
+  <param name="robot_base_frame" value="/tb3_1/base_footprint"/>
+  <param name="costmap_topic" value="/tb3_1/map"/>
+  <param name="costmap_updates_topic" value="/tb3_1/map_updates"/>
+  <param name="visualize" value="true"/>
+  <param name="planner_frequency" value="0.33"/>
+  <param name="progress_timeout" value="30.0"/>
+  <param name="potential_scale" value="3.0"/>
+  <param name="orientation_scale" value="0.0"/>
+  <param name="gain_scale" value="1.0"/>
+  <param name="transform_tolerance" value="0.3"/>
+  <param name="min_frontier_size" value="0.75"/>
+</node>
+</group>
+ 
+<group ns="tb3_2">
+<!-- Turtlebot3 -->
+  <include file="$(find turtlebot3_bringup)/launch/includes/description.launch.xml">
+    <arg name="model" value="$(arg model)" />
+  </include>
+  
+  <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" output="screen">
+    <param name="publish_frequency" type="double" value="50.0" />
+    <param name="tf_prefix" value="tb3_2" />
+  </node>
+ 
+<!-- move_base -->
+  <node pkg="move_base" type="move_base" respawn="false" name="move_base" output="screen">
+    <param name="base_local_planner" value="dwa_local_planner/DWAPlannerROS" />
+    <rosparam file="$(find explore_lite)/param/third_costmap_common_params_$(arg model).yaml" command="load" ns="/tb3_2/global_costmap" />
+    <rosparam file="$(find explore_lite)/param/third_costmap_common_params_$(arg model).yaml" command="load" ns="/tb3_2/local_costmap" />
+    <rosparam file="$(find explore_lite)/param/third_local_costmap_params.yaml" command="load" />
+    <rosparam file="$(find explore_lite)/param/third_global_costmap_params.yaml" command="load" />
+    <rosparam file="$(find explore_lite)/param/move_base_params.yaml" command="load" />
+    <rosparam file="$(find explore_lite)/param/dwa_local_planner_params_$(arg model).yaml" command="load" />
+    <remap from="cmd_vel" to="/tb3_2/cmd_vel"/>
+    <remap from="odom" to="/tb3_2/odom"/>
+    <param name="DWAPlannerROS/min_vel_x" value="0.0" if="$(arg move_forward_only)" />
+  </node>
+ 
+<!-- SLAM -->
+  <node pkg="gmapping" type="slam_gmapping" name="turtlebot3_slam_gmapping" output="screen">
+    <param name="base_frame" value="/tb3_2/base_footprint"/>
+    <param name="odom_frame" value="/tb3_2/odom"/>
+    <param name="map_frame"  value="/tb3_2/map"/>
+    <param name="map_update_interval" value="2.0"/>
+    <param name="maxUrange" value="3.0"/>
+    <param name="sigma" value="0.05"/>
+    <param name="kernelSize" value="1"/>
+    <param name="lstep" value="0.05"/>
+    <param name="astep" value="0.05"/>
+    <param name="iterations" value="5"/>
+    <param name="lsigma" value="0.075"/>
+    <param name="ogain" value="3.0"/>
+    <param name="lskip" value="0"/>
+    <param name="minimumScore" value="50"/>
+    <param name="srr" value="0.1"/>
+    <param name="srt" value="0.2"/>
+    <param name="str" value="0.1"/>
+    <param name="stt" value="0.2"/>
+    <param name="linearUpdate" value="1.0"/>
+    <param name="angularUpdate" value="0.2"/>
+    <param name="temporalUpdate" value="0.5"/>
+    <param name="resampleThreshold" value="0.5"/>
+    <param name="particles" value="100"/>
+    <param name="xmin" value="-10.0"/>
+    <param name="ymin" value="-10.0"/>
+    <param name="xmax" value="10.0"/>
+    <param name="ymax" value="10.0"/>
+    <param name="delta" value="0.05"/>
+    <param name="llsamplerange" value="0.01"/>
+    <param name="llsamplestep" value="0.01"/>
+    <param name="lasamplerange" value="0.005"/>
+    <param name="lasamplestep" value="0.005"/>
+  </node>
+ 
+<!-- Explore -->
+<node pkg="explore_lite" type="explore" respawn="false" name="explore" output="screen">
+  <param name="robot_base_frame" value="/tb3_2/base_footprint"/>
+  <param name="costmap_topic" value="/tb3_2/map"/>
+  <param name="costmap_updates_topic" value="/tb3_2/map_updates"/>
+  <param name="visualize" value="true"/>
+  <param name="planner_frequency" value="0.33"/>
+  <param name="progress_timeout" value="30.0"/>
+  <param name="potential_scale" value="3.0"/>
+  <param name="orientation_scale" value="0.0"/>
+  <param name="gain_scale" value="1.0"/>
+  <param name="transform_tolerance" value="0.3"/>
+  <param name="min_frontier_size" value="0.75"/>
+</node>
+</group>
+ 
+</launch>

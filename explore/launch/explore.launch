@@ -1,0 +1,25 @@
+<launch>
+<!-- move_base -->
+<include file="$(find turtlebot3_navigation)/launch/move_base.launch">
+   <arg name="model" default="$(env TURTLEBOT3_MODEL)" doc="model type [burger, waffle, waffle_pi]"/>
+</include>
+
+<node pkg="explore_lite" type="explore" respawn="false" name="explore" output="screen">
+  <param name="robot_base_frame" value="base_link"/>
+  <param name="costmap_topic" value="map"/>
+  <param name="costmap_updates_topic" value="map_updates"/>
+  <param name="visualize" value="true"/>
+  <param name="planner_frequency" value="0.33"/>
+  <param name="progress_timeout" value="50.0"/>
+  <param name="potential_scale" value="3.0"/>
+  <param name="orientation_scale" value="0.0"/>
+  <param name="gain_scale" value="1.0"/>
+  <param name="transform_tolerance" value="0.3"/>
+  <param name="min_frontier_size" value="0.6"/>
+</node>
+
+ <node pkg="robot_state_publisher" type="robot_state_publisher" name="robot_state_publisher" output="screen">
+   <param name="publish_frequency" type="double" value="50.0" />
+</node>
+
+</launch>

@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>explore_lite</name>
+  <version>2.1.1</version>
+
+  <description>Lightweight frontier-based exploration.</description>
+
+  <author email="laeqten@gmail.com">Jiri Horner</author>
+  <maintainer email="laeqten@gmail.com">Jiri Horner</maintainer>
+  <license>BSD</license>
+  <url>http://wiki.ros.org/explore_lite</url>
+
+  <!-- acknowledgements
+  <author>Charles DuHadway</author>
+  <url>http://ros.org/wiki/explore</url>
+  <author>Paul Bovbel</author>
+  <url>https://github.com/paulbovbel/frontier_exploration</url>
+  -->
+  <buildtool_depend>catkin</buildtool_depend>
+
+  <depend>roscpp</depend>
+  <depend>std_msgs</depend>
+  <depend>move_base_msgs</depend>
+  <depend>visualization_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>map_msgs</depend>
+  <depend>nav_msgs</depend>
+  <depend>actionlib_msgs</depend>
+  <depend>tf</depend>
+  <depend>costmap_2d</depend>
+  <depend>actionlib</depend>
+
+  <test_depend>roslaunch</test_depend>
+</package>
