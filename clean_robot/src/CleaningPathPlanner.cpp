@@ -407,8 +407,8 @@ void CleaningPathPlanning::mainPlanningLoop()
     }
     //initPoint.row = initPose_.getOrigin().y()
     unsigned int mx, my;
-    double wx = initPose_.getOrigin().x(); //获取原点的x坐标
-    double wy = initPose_.getOrigin().y();
+    double wx = initPose_.pose.position.x; //获取原点的x坐标
+    double wy = initPose_.pose.position.y;
     //geometry_msgs::PoseStamped current_position;
     //tf::poseStampedTFToMsg(global_pose, current_position);
 

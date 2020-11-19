@@ -15,8 +15,8 @@ using cm::Costmap2DROS;
 int main(int argc, char** argv) {
     ros::init(argc, argv, "path_planning_node");//hjr
 
-    tf::TransformListener tf(ros::Duration(10));
-
+    tf2_ros::Buffer tf;
+    tf2_ros::TransformListener tf2_listener(tf);
     costmap_2d::Costmap2DROS lcr("cleaning_costmap", tf);
     //planner_costmap_ros_->pause();
 
