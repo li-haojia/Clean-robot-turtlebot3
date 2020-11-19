@@ -16,7 +16,8 @@ sudo apt install ros-${ROS_DISTRO}-turtlebot3 ros-${ROS_DISTRO}-navigation ros-$
 
 ## 使用方法
 ### 自主探索
-explore中为自动探索的包，可以搭配任意的slam算法
+**该程序在Ubuntu 16.04+kinetic上测试通过， Ubuntu 18.04+melodic 请参看 [melodic-devel](https://github.com/mywisdomfly/Clean-robot-turtlebot3/tree/melodic-devel)分支**
+explore中为自动探索的包，这里用的karto slam，可以搭配其他的slam算法
 
 自主探索建图示例启动方法 
 
