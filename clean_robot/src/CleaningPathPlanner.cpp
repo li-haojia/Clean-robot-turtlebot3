@@ -362,10 +362,10 @@ void CleaningPathPlanning::writeResult(Mat resultmat, vector<cellIndex> pathVec)
         Point cupoint = Point(pathVec[i].col * SIZE_OF_CELL + SIZE_OF_CELL / 2, pathVec[i].row * SIZE_OF_CELL + SIZE_OF_CELL / 2);
         if (sqrt((initpoint.x - cupoint.x) * (initpoint.x - cupoint.x) + (initpoint.y - cupoint.y) * (initpoint.y - cupoint.y)) > 2)
         {
-            line(resultmat, initpoint, cupoint, Scalar(0, 255, 0), 0.3, 8); //line就是划线函数
+            line(resultmat, initpoint, cupoint, Scalar(0, 255, 0), 1, 8); //line就是划线函数
         }
         else
-            line(resultmat, initpoint, cupoint, Scalar(0, 0, 255), 0.5);
+            line(resultmat, initpoint, cupoint, Scalar(0, 0, 255), 1);
         initpoint = cupoint;
         cout << "The point of step " << i << " is: " << pathVec[i].row << " " << pathVec[i].col << endl;
         /*resultMat.at<Vec3b>(pathVec[i].row*SIZE_OF_CELL,pathVec[i].col*SIZE_OF_CELL)[0] = 0;
@@ -384,7 +384,7 @@ void CleaningPathPlanning::writeResult(Mat resultmat, vector<cv::Point2i> pathVe
     for (i = 1; i < pathVec.size(); i++)
     {
         Point cupoint = pathVec[i];
-        line(resultmat, initpoint, cupoint, Scalar(0, 0, 255), 0.5);
+        line(resultmat, initpoint, cupoint, Scalar(0, 0, 255), 1);
         initpoint = cupoint;
         //std::cout<<"X: "<<cupoint.x<<","<<"Y:"<<cupoint<<std::endl;
     }
@@ -645,8 +645,8 @@ void CleaningPathPlanning::mainPlanningLoop()
         //  }
     }
 
-    Mat resultMat = Mat(srcMap_.rows, srcMap_.cols, CV_8UC3);
-    writeResult(resultMat, pathVec_);
+    // Mat resultMat = Mat(srcMap_.rows, srcMap_.cols, CV_8UC3);
+    // writeResult(resultMat, pathVec_);
 }
 
 double CleaningPathPlanning::distance(Point2i pta, Point2i ptb)
