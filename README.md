@@ -4,10 +4,10 @@
 
 
 全覆盖路径规划
-![result](img/result.png)
+[![result](img/result.png)](https://www.bilibili.com/video/BV17z4y1D7Wj)
 
 自主探索建图
-![exploration](img/exploration.png)
+[![exploration](img/exploration.png)](https://www.bilibili.com/video/BV17z4y1D7Wj)
 
 ## 安装依赖
 ```bash
