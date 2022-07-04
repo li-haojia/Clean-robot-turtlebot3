@@ -37,8 +37,8 @@ cd clean_robot_ws #确保目录切换到clean_robot_ws 目录下,并执行过编
 source devel/setup.bash
 export TURTLEBOT3_MODEL=burger 
 roslaunch clean_robot clean_work.launch
-# 如果想要加载自己的地图，用下面这个。 map_File:="你的地图路径"
-roslaunch clean_robot clean_work.launch map_file:="~/clean_robot_ws/homemap"
+# 如果想要加载自己的地图，用下面这个。 map_file:="你的地图的绝对路径，加载yaml文件。"
+roslaunch clean_robot clean_work.launch map_file:="/home/xxx/clean_robot_ws/homemap.yaml"
 ```
 ### 自主探索
 explore中为自动探索的包，这里用的karto slam，可以搭配其他的slam算法
