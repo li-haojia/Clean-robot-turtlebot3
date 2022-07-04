@@ -23,7 +23,7 @@ sudo apt install ros-${ROS_DISTRO}-turtlebot3 ros-${ROS_DISTRO}-navigation ros-$
 ### 下载编译软件包
 ```bash
 mkdir -p clean_robot_ws/src && cd clean_robot_ws/src
-git clone https://github.com/mywisdomfly/Clean-robot-turtlebot3.git
+git clone https://github.com/mywisdomfly/Clean-robot-turtlebot3.git -b master
 cd ..
 catkin_make
 ```
@@ -32,8 +32,12 @@ catkin_make
 清扫启动方法 
 
 ```bash
+cd clean_robot_ws #确保目录切换到clean_robot_ws 目录下,并执行过编译
+source devel/setup.bash
 export TURTLEBOT3_MODEL=burger 
 roslaunch clean_robot clean_work.launch
+# 如果想要加载自己的地图，用下面这个。 map_file:="你的地图的绝对路径，加载yaml文件。"
+roslaunch clean_robot clean_work.launch map_file:="/home/xxx/clean_robot_ws/homemap.yaml"
 ```
 ### 自主探索
 explore中为自动探索的包，这里用的karto slam，可以搭配其他的slam算法
@@ -41,17 +45,29 @@ explore中为自动探索的包，这里用的karto slam，可以搭配其他的
 自主探索建图示例启动方法 
 
 ```bash
+cd clean_robot_ws #确保目录切换到clean_robot_ws 目录下,并执行过编译
+source devel/setup.bash
 export TURTLEBOT3_MODEL=burger 
 roslaunch clean_robot auto_slam.launch
+```
+保存地图, **打开一个新的终端**，原来运行的不要关闭。
+```bash
+rosrun map_server map_saver -f ~/clean_robot_ws/homemap #-f 后的参数表示存放路径以及名称
 ```
 
 ### 手动导航建图
 
 ```bash
+cd clean_robot_ws #确保目录切换到clean_robot_ws 目录下,并执行过编译
+source devel/setup.bash
 export TURTLEBOT3_MODEL=burger 
 roslaunch clean_robot nav_slam.launch
 ```
 
+保存地图, **打开一个新的终端**，原来运行的不要关闭。
+```bash
+rosrun map_server map_saver -f ~/clean_robot_ws/homemap #-f 后的参数表示存放路径以及名称
+```
 ## 系统结构
 ![structure](img/structure.png)
 
