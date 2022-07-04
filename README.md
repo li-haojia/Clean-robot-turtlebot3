@@ -23,7 +23,7 @@ sudo apt install ros-${ROS_DISTRO}-turtlebot3 ros-${ROS_DISTRO}-navigation ros-$
 ### 下载编译软件包
 ```bash
 mkdir -p clean_robot_ws/src && cd clean_robot_ws/src
-git clone https://github.com/mywisdomfly/Clean-robot-turtlebot3.git -b master
+git clone https://github.com/mywisdomfly/Clean-robot-turtlebot3.git
 cd ..
 catkin_make
 ```
