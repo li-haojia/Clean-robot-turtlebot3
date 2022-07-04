@@ -13,10 +13,29 @@
 ```bash
 sudo apt install ros-${ROS_DISTRO}-turtlebot3 ros-${ROS_DISTRO}-navigation ros-${ROS_DISTRO}-dwa-local-planner ros-${ROS_DISTRO}-slam-karto
 ```
+**Ubuntu 18.04+melodic 上测试通过。**
+
+**Ubuntu 20.04+Noetic 上测试通过.**
+
+**Ubuntu 16.04请参看[master](https://github.com/mywisdomfly/Clean-robot-turtlebot3/tree/master)分支**
 
 ## 使用方法
+### 下载编译软件包
+```bash
+mkdir -p clean_robot_ws/src && cd clean_robot_ws/src
+git clone https://github.com/mywisdomfly/Clean-robot-turtlebot3.git
+cd ..
+catkin_make
+```
+### 自主清扫
+
+清扫启动方法 
+
+```bash
+export TURTLEBOT3_MODEL=burger 
+roslaunch clean_robot clean_work.launch
+```
 ### 自主探索
-**Ubuntu 18.04+melodic 上测试通过。Ubuntu 16.04请参看[master](https://github.com/mywisdomfly/Clean-robot-turtlebot3/tree/master)分支**
 explore中为自动探索的包，这里用的karto slam，可以搭配其他的slam算法
 
 自主探索建图示例启动方法 
@@ -25,14 +44,7 @@ explore中为自动探索的包，这里用的karto slam，可以搭配其他的
 export TURTLEBOT3_MODEL=burger 
 roslaunch clean_robot auto_slam.launch
 ```
-### 自主探索
 
-清扫启动方法 
-
-```bash
-export TURTLEBOT3_MODEL=burger 
-roslaunch clean_robot clean_work.launch
-```
 ### 手动导航建图
 
 ```bash
